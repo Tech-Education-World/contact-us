@@ -2,47 +2,85 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact Us</title>
+<title>Contact Us | Tech Education World</title>
 
 <style>
 body{
   font-family: Arial;
+  margin:0;
   background:#f5f5f5;
-  padding:20px;
 }
 
+/* CONTAINER */
 .container{
   max-width:500px;
-  margin:auto;
+  margin:40px auto;
   background:#fff;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.1);
 }
 
-h2{text-align:center;}
+/* TITLE */
+h2{
+  text-align:center;
+  margin-bottom:5px;
+}
 
+.subtitle{
+  text-align:center;
+  font-size:14px;
+  color:#777;
+  margin-bottom:20px;
+}
+
+/* INPUT */
 input, textarea{
   width:100%;
   padding:12px;
-  margin:8px 0;
-  border-radius:6px;
+  margin:10px 0;
+  border-radius:8px;
   border:1px solid #ccc;
+  font-size:14px;
 }
 
+/* BUTTON */
 button{
   width:100%;
   padding:12px;
   background:#b4ff55;
   border:none;
   font-weight:bold;
-  border-radius:6px;
+  border-radius:8px;
   cursor:pointer;
+  transition:0.3s;
 }
 
+button:hover{
+  background:#9be63f;
+}
+
+/* STATUS */
 #status{
   text-align:center;
-  margin-top:10px;
+  margin-top:15px;
+  font-size:14px;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  margin-top:20px;
+  font-size:13px;
+  color:#666;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .container{
+    margin:20px;
+    padding:20px;
+  }
 }
 </style>
 </head>
@@ -50,18 +88,28 @@ button{
 <body>
 
 <div class="container">
+
 <h2>Contact Us</h2>
+<p class="subtitle">We’d love to hear from you</p>
 
 <form id="form">
-<input type="text" placeholder="Name" id="name" required>
-<input type="email" placeholder="Email" id="email" required>
-<input type="tel" placeholder="Phone" id="phone" required>
-<textarea placeholder="Message" id="message" required></textarea>
+
+<input type="text" placeholder="Full Name" id="name" required>
+<input type="email" placeholder="Email Address" id="email" required>
+<input type="tel" placeholder="Phone Number" id="phone" required>
+
+<textarea placeholder="Your Message" id="message" rows="4" required></textarea>
 
 <button type="submit">Submit</button>
+
 </form>
 
 <p id="status"></p>
+
+<div class="footer">
+Tech Education World™ • Roorkee, India
+</div>
+
 </div>
 
 <script>
@@ -69,6 +117,8 @@ const scriptURL = "https://script.google.com/macros/s/AKfycby-J5USEA01NfycsXc7S_
 
 document.getElementById("form").addEventListener("submit", function(e){
   e.preventDefault();
+
+  document.getElementById("status").innerHTML = "⏳ Submitting...";
 
   const data = {
     name: document.getElementById("name").value,
@@ -82,11 +132,11 @@ document.getElementById("form").addEventListener("submit", function(e){
     body:JSON.stringify(data)
   })
   .then(() => {
-    document.getElementById("status").innerHTML = "✅ Submitted Successfully";
+    document.getElementById("status").innerHTML = "✅ Submitted Successfully!";
     document.getElementById("form").reset();
   })
   .catch(() => {
-    document.getElementById("status").innerHTML = "❌ Error submitting form";
+    document.getElementById("status").innerHTML = "❌ Error! Try again.";
   });
 });
 </script>
