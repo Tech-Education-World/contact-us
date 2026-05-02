@@ -11,7 +11,6 @@ body{
   background:#f5f5f5;
 }
 
-/* CONTAINER */
 .container{
   max-width:500px;
   margin:40px auto;
@@ -21,7 +20,6 @@ body{
   box-shadow:0 6px 20px rgba(0,0,0,0.1);
 }
 
-/* TITLE */
 h2{
   text-align:center;
   margin-bottom:5px;
@@ -34,7 +32,6 @@ h2{
   margin-bottom:20px;
 }
 
-/* INPUT */
 input, textarea{
   width:100%;
   padding:12px;
@@ -44,7 +41,6 @@ input, textarea{
   font-size:14px;
 }
 
-/* BUTTON */
 button{
   width:100%;
   padding:12px;
@@ -60,14 +56,12 @@ button:hover{
   background:#9be63f;
 }
 
-/* STATUS */
 #status{
   text-align:center;
   margin-top:15px;
   font-size:14px;
 }
 
-/* FOOTER */
 .footer{
   text-align:center;
   margin-top:20px;
@@ -75,7 +69,6 @@ button:hover{
   color:#666;
 }
 
-/* MOBILE */
 @media(max-width:600px){
   .container{
     margin:20px;
@@ -97,6 +90,9 @@ button:hover{
 <input type="text" placeholder="Full Name" id="name" required>
 <input type="email" placeholder="Email Address" id="email" required>
 <input type="tel" placeholder="Phone Number" id="phone" required>
+
+<!-- ✅ NEW FIELD -->
+<input type="text" placeholder="Address" id="address">
 
 <textarea placeholder="Your Message" id="message" rows="4" required></textarea>
 
@@ -124,20 +120,28 @@ document.getElementById("form").addEventListener("submit", function(e){
     name: document.getElementById("name").value,
     email: document.getElementById("email").value,
     phone: document.getElementById("phone").value,
-    address: document.getElementById("name").value,
+    address: document.getElementById("address").value, // ✅ added
     message: document.getElementById("message").value
   };
 
   fetch(scriptURL, {
     method:"POST",
-    body:JSON.stringify(data)
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json"   // ✅ IMPORTANT FIX
+    }
   })
-  .then(() => {
-    document.getElementById("status").innerHTML = "✅ Submitted Successfully!";
-    document.getElementById("form").reset();
+  .then(res => res.json())
+  .then(response => {
+    if(response.status === "success"){
+      document.getElementById("status").innerHTML = "✅ Submitted Successfully!";
+      document.getElementById("form").reset();
+    } else {
+      document.getElementById("status").innerHTML = "❌ Error: " + response.message;
+    }
   })
   .catch(() => {
-    document.getElementById("status").innerHTML = "❌ Error! Try again.";
+    document.getElementById("status").innerHTML = "❌ Network Error!";
   });
 });
 </script>
