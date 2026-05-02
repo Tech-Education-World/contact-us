@@ -22,7 +22,6 @@ body{
 
 h2{
   text-align:center;
-  margin-bottom:5px;
 }
 
 .subtitle{
@@ -38,7 +37,6 @@ input, textarea{
   margin:10px 0;
   border-radius:8px;
   border:1px solid #ccc;
-  font-size:14px;
 }
 
 button{
@@ -49,11 +47,6 @@ button{
   font-weight:bold;
   border-radius:8px;
   cursor:pointer;
-  transition:0.3s;
-}
-
-button:hover{
-  background:#9be63f;
 }
 
 #status{
@@ -62,19 +55,6 @@ button:hover{
   font-size:14px;
 }
 
-.footer{
-  text-align:center;
-  margin-top:20px;
-  font-size:13px;
-  color:#666;
-}
-
-@media(max-width:600px){
-  .container{
-    margin:20px;
-    padding:20px;
-  }
-}
 </style>
 </head>
 
@@ -90,8 +70,6 @@ button:hover{
 <input type="text" placeholder="Full Name" id="name" required>
 <input type="email" placeholder="Email Address" id="email" required>
 <input type="tel" placeholder="Phone Number" id="phone" required>
-
-<!-- ✅ NEW FIELD -->
 <input type="text" placeholder="Address" id="address">
 
 <textarea placeholder="Your Message" id="message" rows="4" required></textarea>
@@ -102,47 +80,38 @@ button:hover{
 
 <p id="status"></p>
 
-<div class="footer">
-Tech Education World™ • Roorkee, India
-</div>
-
 </div>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxFuRwEO0k8uqrbvu-XNvsx9xzNahhFcsNERFPZltcpfHDEFzBcTA78je5ab3AczIvs/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbzsgZnNubrflLIVya1RiEVafsVuTbKe4JpC7Z4f3jtymoccBUdYfRChhGgHVHVEPHF-/exec";
 
 document.getElementById("form").addEventListener("submit", function(e){
   e.preventDefault();
 
-  document.getElementById("status").innerHTML = "⏳ Submitting...";
+  const status = document.getElementById("status");
+  status.innerHTML = "⏳ Submitting...";
 
   const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-    address: document.getElementById("address").value, // ✅ added
-    message: document.getElementById("message").value
+    name: name.value,
+    email: email.value,
+    phone: phone.value,
+    address: address.value,
+    message: message.value
   };
 
   fetch(scriptURL, {
     method:"POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json"   // ✅ IMPORTANT FIX
-    }
+    mode: "no-cors",   // 🔥 MOST IMPORTANT FIX
+    body: JSON.stringify(data)
   })
-  .then(res => res.json())
-  .then(response => {
-    if(response.status === "success"){
-      document.getElementById("status").innerHTML = "✅ Submitted Successfully!";
-      document.getElementById("form").reset();
-    } else {
-      document.getElementById("status").innerHTML = "❌ Error: " + response.message;
-    }
+  .then(() => {
+    status.innerHTML = "✅ Submitted Successfully!";
+    document.getElementById("form").reset();
   })
   .catch(() => {
-    document.getElementById("status").innerHTML = "❌ Network Error!";
+    status.innerHTML = "❌ Failed to submit";
   });
+
 });
 </script>
 
