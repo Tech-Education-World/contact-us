@@ -54,7 +54,6 @@ button{
   margin-top:15px;
   font-size:14px;
 }
-
 </style>
 </head>
 
@@ -67,12 +66,11 @@ button{
 
 <form id="form">
 
-<input type="text" placeholder="Full Name" id="name" required>
-<input type="email" placeholder="Email Address" id="email" required>
-<input type="tel" placeholder="Phone Number" id="phone" required>
-<input type="text" placeholder="Address" id="address">
-
-<textarea placeholder="Your Message" id="message" rows="4" required></textarea>
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="email" id="email" placeholder="Email Address" required>
+<input type="tel" id="phone" placeholder="Phone Number" required>
+<input type="text" id="address" placeholder="Address">
+<textarea id="message" placeholder="Your Message" rows="4" required></textarea>
 
 <button type="submit">Submit</button>
 
@@ -85,33 +83,41 @@ button{
 <script>
 const scriptURL = "https://script.google.com/macros/s/AKfycbyUvgOh5yJKxs-ZsKIjH5BY8l5pyUcG7WuZUeVfQ5Jvu0riQSIfkNs7Sd6iRj0MIVyI/exec";
 
-document.getElementById("form").addEventListener("submit", function(e){
+const form = document.getElementById("form");
+const status = document.getElementById("status");
+
+// ✅ Cache inputs (best practice)
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
+const addressInput = document.getElementById("address");
+const messageInput = document.getElementById("message");
+
+form.addEventListener("submit", function(e){
   e.preventDefault();
 
-  const status = document.getElementById("status");
   status.innerHTML = "⏳ Submitting...";
 
   const data = {
-    name: name.value,
-    email: email.value,
-    phone: phone.value,
-    address: address.value,
-    message: message.value
+    name: nameInput.value.trim(),
+    email: emailInput.value.trim(),
+    phone: phoneInput.value.trim(),
+    address: addressInput.value.trim(),
+    message: messageInput.value.trim()
   };
 
   fetch(scriptURL, {
     method:"POST",
-    mode: "no-cors",   // 🔥 MOST IMPORTANT FIX
+    mode:"no-cors",
     body: JSON.stringify(data)
   })
   .then(() => {
     status.innerHTML = "✅ Submitted Successfully!";
-    document.getElementById("form").reset();
+    form.reset();
   })
   .catch(() => {
     status.innerHTML = "❌ Failed to submit";
   });
-
 });
 </script>
 
