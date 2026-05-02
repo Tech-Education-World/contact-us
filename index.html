@@ -56,7 +56,12 @@ button{
   transition:0.3s;
 }
 
-button:hover{
+button:disabled{
+  background:#ccc;
+  cursor:not-allowed;
+}
+
+button:hover:not(:disabled){
   background:#9be63f;
 }
 
@@ -65,6 +70,19 @@ button:hover{
   text-align:center;
   margin-top:15px;
   font-size:14px;
+}
+
+/* WHATSAPP BUTTON */
+.whatsapp{
+  display:block;
+  text-align:center;
+  margin-top:15px;
+  padding:10px;
+  background:#25D366;
+  color:#fff;
+  text-decoration:none;
+  border-radius:8px;
+  font-weight:bold;
 }
 
 /* FOOTER */
@@ -100,11 +118,17 @@ button:hover{
 
 <textarea placeholder="Your Message" id="message" rows="4" required></textarea>
 
-<button type="submit">Submit</button>
+<button type="submit" id="submitBtn">Submit</button>
 
 </form>
 
 <p id="status"></p>
+
+<!-- WhatsApp Quick Contact -->
+<a href="https://wa.me/917500982742?text=Hello%20I%20want%20to%20connect%20with%20Tech%20Education%20World"
+class="whatsapp" target="_blank">
+Chat on WhatsApp
+</a>
 
 <div class="footer">
 Tech Education World™ • Roorkee, India
@@ -115,28 +139,37 @@ Tech Education World™ • Roorkee, India
 <script>
 const scriptURL = "https://script.google.com/macros/s/AKfycby-J5USEA01NfycsXc7S_BwaGJTrZ_vD6hqi3LQ8DtZWBxv-ZOPxUtIMyGByVN27goI/exec";
 
-document.getElementById("form").addEventListener("submit", function(e){
+const form = document.getElementById("form");
+const status = document.getElementById("status");
+const btn = document.getElementById("submitBtn");
+
+form.addEventListener("submit", function(e){
   e.preventDefault();
 
-  document.getElementById("status").innerHTML = "⏳ Submitting...";
+  btn.disabled = true;
+  status.innerHTML = "⏳ Submitting...";
 
   const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-    message: document.getElementById("message").value
+    name: document.getElementById("name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    message: document.getElementById("message").value.trim()
   };
 
   fetch(scriptURL, {
     method:"POST",
-    body:JSON.stringify(data)
+    body:JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
   })
+  .then(res => res.json())
   .then(() => {
-    document.getElementById("status").innerHTML = "✅ Submitted Successfully!";
-    document.getElementById("form").reset();
+    status.innerHTML = "✅ Submitted Successfully!";
+    form.reset();
+    btn.disabled = false;
   })
   .catch(() => {
-    document.getElementById("status").innerHTML = "❌ Error! Try again.";
+    status.innerHTML = "❌ Error! Please try again.";
+    btn.disabled = false;
   });
 });
 </script>
